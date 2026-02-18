@@ -25,7 +25,7 @@ exports.getUserById = (req, res) => {
 
 // create user
 exports.getCreateUser = (req, res) => {
-  const {name, email} = req.body;
+  const { name, email } = req.body;
   if (!name || !email) {
     return res.status(400).json({ message: "Name and Email are required" });
   }
@@ -37,4 +37,29 @@ exports.getCreateUser = (req, res) => {
       res.status(200).json({ id: result.insertId, name, email });
     },
   );
+};
+
+// Update user
+exports.getUpdateUser = (req, res) => {
+  const { name, email } = req.body;
+  db.query(
+    "update users set name=?,email=? where id=?",
+    [name, email, req.params.id],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.status(200).json({
+        id: req.params.id,
+        name,
+        email,
+      });
+    },
+  );
+};
+
+// delete user
+exports.getDeleteUser = (req, res) => {
+  db.query("delete from users where id=?", [req.params.id], (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(200).json({ message: "user deleted" });
+  });
 };
