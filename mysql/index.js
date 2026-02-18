@@ -3,6 +3,12 @@ const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
 const db = require("./db");
+const userRoutes=require("./routes/userRoutes")
+
+
+app.use(bodyParser.json())
+app.use("/users",userRoutes)
+
 
 db.connect((err) => {
   if (err) {
@@ -15,3 +21,5 @@ db.connect((err) => {
     console.log(`Server running at http://localhost:${port}`);
   });
 });
+
+
